@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SmartInventory.Api/SmartInventory.Api.csproj" />
+    <Project Path="src/SmartInventory.Core/SmartInventory.Core.csproj" />
+    <Project Path="src/SmartInventory.Infrastructure/SmartInventory.Infrastructure.csproj" />
+  </Folder>
+</Solution>
