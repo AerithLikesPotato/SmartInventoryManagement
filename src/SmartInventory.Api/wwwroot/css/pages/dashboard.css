@@ -1,0 +1,26 @@
+/* Dashboard (Views/Dashboard/Index.cshtml). */
+.dashboard-columns {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 64rem) {
+  .dashboard-columns {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: start;
+  }
+}
+
+.attention-item {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.attention-item__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}

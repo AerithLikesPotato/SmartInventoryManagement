@@ -1,0 +1,36 @@
+/* KPI card. Tone only tints the icon — the number stays high-contrast text. */
+.stat {
+  --stat-tone: var(--c-accent);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.stat__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  box-shadow: var(--inset-sm);
+  color: var(--stat-tone);
+}
+
+.stat__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--c-text-muted);
+}
+
+.stat__value {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat--warning { --stat-tone: var(--c-warning); }
+.stat--danger { --stat-tone: var(--c-danger); }
+.stat--success { --stat-tone: var(--c-success); }

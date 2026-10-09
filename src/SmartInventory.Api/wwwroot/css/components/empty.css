@@ -1,0 +1,23 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-7) var(--space-5);
+  text-align: center;
+}
+
+.empty__icon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  box-shadow: var(--inset-md);
+  color: var(--c-text-muted);
+}
+
+.empty p {
+  max-width: 32ch;
+  color: var(--c-text-muted);
+}

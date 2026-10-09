@@ -1,0 +1,14 @@
+@model StatCardViewModel
+@{
+    var toneClass = string.IsNullOrEmpty(Model.Tone) ? string.Empty : " stat--" + Model.Tone;
+    var cssClass = "card stat" + toneClass;
+}
+<article class="@cssClass">
+    <span class="stat__icon" aria-hidden="true">
+        <svg class="icon"><use href="#i-@Model.Icon"></use></svg>
+    </span>
+    <div>
+        <p class="stat__label">@Model.Label</p>
+        <p class="stat__value">@Model.Value</p>
+    </div>
+</article>

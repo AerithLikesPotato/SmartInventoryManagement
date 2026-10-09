@@ -1,0 +1,13 @@
+@model ProductRowViewModel
+@{
+    var cssClass = "meter meter--" + Model.Status.Tone();
+    var fill = "--value: " + Model.FillPercent + "%";
+}
+<div class="@cssClass" role="meter"
+     aria-label="Stock level"
+     aria-valuemin="0"
+     aria-valuemax="@Model.MeterMax"
+     aria-valuenow="@Model.CurrentStock"
+     aria-valuetext="@Model.CurrentStock of @Model.MeterMax target units">
+    <span class="meter__fill" style="@fill"></span>
+</div>

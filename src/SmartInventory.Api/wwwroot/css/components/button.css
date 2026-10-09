@@ -1,0 +1,84 @@
+/*
+ * .btn            raised, pressed-in on :active
+ * .btn--primary   accent fill (one per view)
+ * .btn--icon      square/circular icon-only (needs aria-label)
+ * .btn--block     full width
+ * .is-loading     set by js/modules/forms.js on submit
+ */
+.btn {
+  --btn-bg: var(--c-surface);
+  --btn-fg: var(--c-text);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--tap);
+  padding: 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: var(--raised-sm);
+  transition: box-shadow var(--dur-1) var(--ease), background-color var(--dur-1) var(--ease);
+}
+
+.btn:hover {
+  color: var(--btn-fg);
+  box-shadow: var(--raised-md);
+}
+
+.btn:active,
+.btn[aria-pressed="true"] {
+  box-shadow: var(--inset-sm);
+}
+
+.btn--primary {
+  --btn-bg: var(--c-accent);
+  --btn-fg: var(--c-on-accent);
+}
+
+.btn--primary:hover {
+  --btn-bg: var(--c-accent-strong);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn--icon {
+  width: var(--tap);
+  padding: 0;
+  border-radius: 50%;
+}
+
+.btn[disabled],
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+.btn.is-loading {
+  cursor: progress;
+  pointer-events: none;
+}
+
+.btn.is-loading::after {
+  content: "";
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-inline-end-color: transparent;
+  border-radius: 50%;
+  animation: btn-spin 0.7s linear infinite;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

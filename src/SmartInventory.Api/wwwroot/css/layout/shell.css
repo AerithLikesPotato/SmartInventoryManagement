@@ -1,0 +1,43 @@
+/*
+ * App shell: [ sidebar | main ].
+ * Below 64rem the sidebar becomes an off-canvas drawer toggled via
+ * [data-open] on .shell (see js/modules/sidebar.js).
+ */
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+.shell__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.shell__content {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: var(--space-3) var(--space-5) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.shell__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scrim);
+  background: var(--c-scrim);
+}
+
+@media (max-width: 63.99rem) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shell__content {
+    padding-inline: var(--space-4);
+  }
+}

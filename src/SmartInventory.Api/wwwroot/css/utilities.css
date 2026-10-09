@@ -1,0 +1,48 @@
+/* Single-purpose helpers. Keep this file small — if you need many, it's a component. */
+.text-muted {
+  color: var(--c-text-muted);
+}
+
+.text-sm {
+  font-size: var(--text-sm);
+}
+
+.text-end {
+  text-align: end;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/*
+ * Elements that only exist while the sidebar is a drawer (< 64rem): hamburger,
+ * mobile brand, drawer close button. This is a utility (not a layout rule)
+ * because components such as .btn set `display`, and the utilities layer is
+ * the one layer guaranteed to beat them.
+ */
+@media (min-width: 64rem) {
+  .drawer-only {
+    display: none;
+  }
+}

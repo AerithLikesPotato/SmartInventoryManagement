@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartInventory.Core.Entities;
+using SmartInventory.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace SmartInventory.Infrastructure.Data;
 
-public class InventoryDbContext : DbContext
+public class InventoryDbContext : IdentityDbContext<ApplicationUser>
 {
     public InventoryDbContext(DbContextOptions<InventoryDbContext> options) : base(options)
     {

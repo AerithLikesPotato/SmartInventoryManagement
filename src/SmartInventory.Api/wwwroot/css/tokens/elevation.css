@@ -1,0 +1,20 @@
+/*
+ * Elevation tokens — the whole neumorphic look lives in these six values.
+ *
+ *   raised-*  element stands out of the surface (buttons, cards)
+ *   inset-*   element is pressed into the surface (inputs, active nav, badges)
+ *
+ * Components must use these tokens and never write their own box-shadow, so
+ * the depth language stays consistent and can be re-tuned in one place.
+ */
+:root {
+  --raised-sm: 3px 3px 7px var(--sh-dark), -3px -3px 7px var(--sh-light);
+  --raised-md: 6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light);
+  --raised-lg: 10px 10px 26px var(--sh-dark), -10px -10px 26px var(--sh-light);
+
+  --inset-sm: inset 2px 2px 5px var(--sh-dark), inset -2px -2px 5px var(--sh-light);
+  --inset-md: inset 4px 4px 9px var(--sh-dark), inset -4px -4px 9px var(--sh-light);
+
+  /* Keyboard focus is NOT shadow-based: it must stay visible in both themes. */
+  --focus-ring: 3px solid var(--c-accent);
+}

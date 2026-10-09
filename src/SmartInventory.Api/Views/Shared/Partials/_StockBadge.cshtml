@@ -1,0 +1,5 @@
+@model StockStatus
+@{
+    var cssClass = "badge badge--" + Model.Tone();
+}
+<span class="@cssClass">@Model.Label()</span>

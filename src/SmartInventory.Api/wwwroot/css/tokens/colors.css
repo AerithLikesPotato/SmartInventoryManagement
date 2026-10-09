@@ -1,0 +1,66 @@
+/*
+ * Colour tokens.
+ *
+ * Neumorphism has one defining constraint: the surface colour and the page
+ * colour are the SAME, and depth is drawn entirely with a light + dark shadow
+ * pair. So the palette is tiny: one surface, text, accent, and status colours.
+ *
+ * Every text colour here is checked >= 4.5:1 against its surface
+ * (see docs/FRONTEND.md). Neumorphism is infamous for weak contrast, so
+ * meaning is never carried by shadow alone — only by text, icons and labels.
+ *
+ * Theming: light is the default; [data-theme="dark"] overrides the same names.
+ * The attribute is set before first paint by Views/Shared/Layout/_ThemeInit.
+ */
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --c-surface: #e4e9f1;
+  --c-line: rgb(31 39 51 / 0.12);
+
+  /* Text */
+  --c-text: #1f2733;
+  --c-text-muted: #4d596c;
+
+  /* Brand */
+  --c-accent: #3f53cf;
+  --c-accent-strong: #3345b8;
+  --c-on-accent: #ffffff;
+
+  /* Status (used as text/icon colours on --c-surface) */
+  --c-success: #146c3a;
+  --c-warning: #8a4b00;
+  --c-danger: #b3261e;
+  --c-info: #1f5fa6;
+
+  /* Neumorphic shadow pair */
+  --sh-light: #ffffff;
+  --sh-dark: #a8b3c6;
+
+  --c-scrim: rgb(15 20 30 / 0.45);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --c-surface: #23272f;
+  --c-line: rgb(231 236 243 / 0.12);
+
+  --c-text: #e8ecf3;
+  --c-text-muted: #a6b0c0;
+
+  --c-accent: #9aa8ff;
+  --c-accent-strong: #b3beff;
+  --c-on-accent: #11152f;
+
+  --c-success: #66d492;
+  --c-warning: #f2b862;
+  --c-danger: #ff8f86;
+  --c-info: #86bdff;
+
+  --sh-light: #2f353f;
+  --sh-dark: #171a20;
+
+  --c-scrim: rgb(0 0 0 / 0.6);
+}

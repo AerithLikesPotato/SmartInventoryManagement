@@ -1,0 +1,7 @@
+@* Development: readable source (css/app.css @imports the parts). Otherwise: the minified bundle from `npm run build`. *@
+<environment include="Development">
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+</environment>
+<environment exclude="Development">
+    <link rel="stylesheet" href="~/dist/app.min.css" asp-append-version="true" />
+</environment>

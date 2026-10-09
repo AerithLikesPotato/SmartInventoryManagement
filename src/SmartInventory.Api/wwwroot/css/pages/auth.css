@@ -1,0 +1,38 @@
+/* Sign-in page (Views/Shared/_AuthLayout.cshtml). */
+.auth {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: var(--space-5) var(--space-4);
+}
+
+.auth__theme {
+  position: absolute;
+  inset-block-start: var(--space-4);
+  inset-inline-end: var(--space-4);
+}
+
+.auth__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: min(100%, 27rem);
+  padding: var(--space-6) clamp(var(--space-5), 5vw, var(--space-6));
+  border-radius: calc(var(--radius-lg) + 0.5rem);
+  background: var(--c-surface);
+  box-shadow: var(--raised-lg);
+}
+
+.auth__intro p {
+  margin-top: var(--space-2);
+  color: var(--c-text-muted);
+}
+
+.auth__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}

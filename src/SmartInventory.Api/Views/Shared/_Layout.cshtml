@@ -1,0 +1,29 @@
+@* Authenticated app shell: sidebar + topbar + content. Auth pages use _AuthLayout. *@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <partial name="Layout/_Head" />
+    @await RenderSectionAsync("Head", required: false)
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <partial name="Layout/_Icons" />
+
+    <div class="shell" data-shell>
+        <partial name="Layout/_Sidebar" />
+
+        <div class="shell__main" data-shell-main>
+            <partial name="Layout/_Topbar" />
+            <main id="main" class="shell__content" tabindex="-1">
+                @RenderBody()
+            </main>
+        </div>
+
+        <div class="shell__scrim" data-sidebar-scrim hidden></div>
+    </div>
+
+    <partial name="Layout/_Toasts" />
+    <partial name="Layout/_Scripts" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

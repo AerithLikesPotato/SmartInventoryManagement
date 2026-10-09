@@ -1,0 +1,26 @@
+@* Minimal centred layout for unauthenticated pages (sign in). *@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <partial name="Layout/_Head" />
+    @await RenderSectionAsync("Head", required: false)
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <partial name="Layout/_Icons" />
+
+    <main id="main" class="auth" tabindex="-1">
+        <div class="auth__theme">
+            <partial name="Partials/_ThemeToggle" />
+        </div>
+
+        <div class="auth__card">
+            @RenderBody()
+        </div>
+    </main>
+
+    <partial name="Layout/_Toasts" />
+    <partial name="Layout/_Scripts" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

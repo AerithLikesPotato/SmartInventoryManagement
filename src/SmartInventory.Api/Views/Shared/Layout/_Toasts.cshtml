@@ -1,0 +1,22 @@
+@*
+    Always-present live region. Controllers raise a toast with:
+        TempData["Success"] = "Saved.";   or   TempData["Error"] = "Something went wrong.";
+    Client code can call showToast(message, kind) from js/modules/toast.js.
+*@
+<div class="toasts" data-toasts aria-live="polite">
+    @foreach (var (key, kind) in new[] { ("Success", "success"), ("Error", "error") })
+    {
+        if (TempData[key] is string message && !string.IsNullOrWhiteSpace(message))
+        {
+            var cssClass = "toast toast--" + kind;
+            var icon = kind == "error" ? "i-alert" : "i-check-circle";
+            <div class="@cssClass" data-toast>
+                <svg class="icon toast__icon" aria-hidden="true" focusable="false"><use href="#@icon"></use></svg>
+                <span>@message</span>
+                <button type="button" class="btn btn--icon" data-toast-close aria-label="Dismiss notification">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+                </button>
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,76 @@
+@model ProductFormViewModel
+@{
+    ViewData["Title"] = "Add product";
+}
+
+<div class="stack page-narrow" style="--stack-gap: var(--space-6)">
+    <div class="page-header">
+        <div class="page-header__text">
+            <h1>Add product</h1>
+            <p>New products start with their opening stock recorded as a stock-in.</p>
+        </div>
+        <a class="btn" asp-action="Index">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-left"></use></svg>
+            Back to products
+        </a>
+    </div>
+
+    <form asp-action="Create" method="post" class="card stack" style="--stack-gap: var(--space-5)" data-submit-lock novalidate>
+        <div asp-validation-summary="ModelOnly" class="alert alert--danger" role="alert"></div>
+
+        <div class="form-grid">
+            <div class="field">
+                <label asp-for="Sku" class="field__label"></label>
+                <input asp-for="Sku" class="input mono" autocomplete="off" autofocus aria-describedby="Sku-error" />
+                <span asp-validation-for="Sku" id="Sku-error" class="field__error"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="Name" class="field__label"></label>
+                <input asp-for="Name" class="input" autocomplete="off" aria-describedby="Name-error" />
+                <span asp-validation-for="Name" id="Name-error" class="field__error"></span>
+            </div>
+
+            <div class="field field--full">
+                <label asp-for="Description" class="field__label"></label>
+                <textarea asp-for="Description" class="input" rows="3" aria-describedby="Description-error"></textarea>
+                <span asp-validation-for="Description" id="Description-error" class="field__error"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="UnitPrice" class="field__label"></label>
+                <input asp-for="UnitPrice" type="number" step="0.01" min="0" inputmode="decimal" class="input"
+                       aria-describedby="UnitPrice-error" />
+                <span asp-validation-for="UnitPrice" id="UnitPrice-error" class="field__error"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="InitialStock" class="field__label"></label>
+                <input asp-for="InitialStock" type="number" step="1" min="0" inputmode="numeric" class="input"
+                       aria-describedby="InitialStock-error" />
+                <span asp-validation-for="InitialStock" id="InitialStock-error" class="field__error"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="ReorderLevel" class="field__label"></label>
+                <input asp-for="ReorderLevel" type="number" step="1" min="0" inputmode="numeric" class="input"
+                       aria-describedby="ReorderLevel-hint ReorderLevel-error" />
+                <span id="ReorderLevel-hint" class="field__hint">Raise a low-stock warning at or below this quantity.</span>
+                <span asp-validation-for="ReorderLevel" id="ReorderLevel-error" class="field__error"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="TargetStockLevel" class="field__label"></label>
+                <input asp-for="TargetStockLevel" type="number" step="1" min="0" inputmode="numeric" class="input"
+                       aria-describedby="TargetStockLevel-hint TargetStockLevel-error" />
+                <span id="TargetStockLevel-hint" class="field__hint">The quantity you restock up to.</span>
+                <span asp-validation-for="TargetStockLevel" id="TargetStockLevel-error" class="field__error"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a class="btn" asp-action="Index">Cancel</a>
+            <button type="submit" class="btn btn--primary" data-loading-label="Saving…">Save product</button>
+        </div>
+    </form>
+</div>

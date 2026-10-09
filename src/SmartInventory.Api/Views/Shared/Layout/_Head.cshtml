@@ -1,0 +1,11 @@
+@{
+    var title = ViewData["Title"] as string;
+}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
+<title>@(string.IsNullOrWhiteSpace(title) ? "SmartInventory" : title + " · SmartInventory")</title>
+<link rel="icon" href="~/favicon.svg" type="image/svg+xml" />
+
+<partial name="Layout/_ThemeInit" />
+<partial name="Layout/_Styles" />

@@ -1,0 +1,23 @@
+/* Inset track + filled bar. Set fill with style="--value: 62%". */
+.meter {
+  --meter-color: var(--c-accent);
+
+  height: 0.625rem;
+  min-width: 5rem;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--inset-sm);
+  overflow: hidden;
+}
+
+.meter__fill {
+  display: block;
+  height: 100%;
+  width: var(--value, 0%);
+  border-radius: inherit;
+  background: var(--meter-color);
+  transition: width var(--dur-2) var(--ease);
+}
+
+.meter--success { --meter-color: var(--c-success); }
+.meter--warning { --meter-color: var(--c-warning); }
+.meter--danger { --meter-color: var(--c-danger); }

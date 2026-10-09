@@ -1,0 +1,51 @@
+@model LoginViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Sign in";
+}
+
+<a class="brand" asp-controller="Account" asp-action="Login">
+    <span class="brand__mark" aria-hidden="true">
+        <svg class="icon"><use href="#i-box"></use></svg>
+    </span>
+    SmartInventory
+</a>
+
+<div class="auth__intro">
+    <h1>Welcome back</h1>
+    <p>Sign in to manage your stock.</p>
+</div>
+
+<form asp-action="Login" method="post" class="stack" style="--stack-gap: var(--space-5)" data-submit-lock novalidate>
+    <input type="hidden" asp-for="ReturnUrl" />
+
+    <div asp-validation-summary="ModelOnly" class="alert alert--danger" role="alert"></div>
+
+    <div class="field">
+        <label asp-for="Email" class="field__label"></label>
+        <input asp-for="Email" class="input" autocomplete="username" inputmode="email" autofocus
+               placeholder="you@company.com" aria-describedby="Email-error" />
+        <span asp-validation-for="Email" id="Email-error" class="field__error"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="Password" class="field__label"></label>
+        <div class="input-group">
+            <input asp-for="Password" class="input" autocomplete="current-password"
+                   aria-describedby="Password-error" />
+            <button type="button" class="input-group__action" data-password-toggle
+                    aria-controls="Password" aria-pressed="false" aria-label="Show password">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye"></use></svg>
+            </button>
+        </div>
+        <span asp-validation-for="Password" id="Password-error" class="field__error"></span>
+    </div>
+
+    <label class="check">
+        <input asp-for="RememberMe" class="check__input" />
+        <span class="check__box" aria-hidden="true"></span>
+        <span>Keep me signed in</span>
+    </label>
+
+    <button type="submit" class="btn btn--primary btn--block" data-loading-label="Signing in…">Sign in</button>
+</form>

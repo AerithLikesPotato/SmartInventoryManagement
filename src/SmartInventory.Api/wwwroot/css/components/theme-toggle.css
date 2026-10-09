@@ -1,0 +1,5 @@
+/* Show the icon of the theme you would switch TO. */
+[data-theme="dark"] .theme-toggle__moon,
+:root:not([data-theme="dark"]) .theme-toggle__sun {
+  display: none;
+}

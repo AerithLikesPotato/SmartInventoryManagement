@@ -1,0 +1,56 @@
+/* Region is always in the DOM (aria-live); toasts are injected into it. */
+.toasts {
+  position: fixed;
+  inset-inline: var(--space-4);
+  inset-block-end: var(--space-4);
+  z-index: var(--z-toast);
+  display: grid;
+  justify-items: end;
+  gap: var(--space-3);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 26rem;
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--c-surface);
+  box-shadow: var(--raised-lg);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  pointer-events: auto;
+  animation: toast-in var(--dur-2) var(--ease);
+}
+
+.toast__icon {
+  color: var(--toast-tone, var(--c-info));
+}
+
+.toast--success { --toast-tone: var(--c-success); }
+.toast--error { --toast-tone: var(--c-danger); }
+
+.toast.is-leaving {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .toasts {
+    justify-items: stretch;
+  }
+
+  .toast {
+    max-width: none;
+  }
+}

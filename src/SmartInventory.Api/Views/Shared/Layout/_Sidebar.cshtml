@@ -1,0 +1,64 @@
+@*
+    Primary navigation. To add a page to the menu, add ONE line to `nav` below.
+    The active item is derived from the current controller (aria-current="page").
+*@
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+
+    var nav = new[]
+    {
+        (Label: "Dashboard", Controller: "Dashboard", Action: "Index", Icon: "grid"),
+        (Label: "Products", Controller: "Products", Action: "Index", Icon: "box"),
+    };
+
+    var userName = User.Identity?.Name ?? "Signed in";
+    var initial = userName.Length > 0 ? char.ToUpperInvariant(userName[0]).ToString() : "?";
+    var role = User.IsInRole("Admin") ? "Administrator" : "Member";
+}
+<div class="sidebar" id="app-sidebar" data-sidebar>
+    <div class="sidebar__panel">
+        <div class="sidebar__head">
+            <a class="brand" asp-controller="Dashboard" asp-action="Index">
+                <span class="brand__mark" aria-hidden="true">
+                    <svg class="icon"><use href="#i-box"></use></svg>
+                </span>
+                SmartInventory
+            </a>
+            <button type="button" class="btn btn--icon drawer-only" data-sidebar-close aria-label="Close navigation">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+            </button>
+        </div>
+
+        <nav class="sidebar__nav" aria-label="Main">
+            <p class="sidebar__section" aria-hidden="true">Menu</p>
+            @foreach (var item in nav)
+            {
+                var isActive = string.Equals(currentController, item.Controller, StringComparison.OrdinalIgnoreCase);
+                <a class="nav-link"
+                   asp-controller="@item.Controller"
+                   asp-action="@item.Action"
+                   aria-current="@(isActive ? "page" : null)">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-@item.Icon"></use></svg>
+                    @item.Label
+                </a>
+            }
+        </nav>
+
+        <div class="sidebar__foot">
+            <div class="user-chip">
+                <span class="user-chip__avatar" aria-hidden="true">@initial</span>
+                <div class="user-chip__text">
+                    <p class="user-chip__name" title="@userName">@userName</p>
+                    <p class="user-chip__role">@role</p>
+                </div>
+            </div>
+
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="btn btn--block">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-log-out"></use></svg>
+                    Sign out
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

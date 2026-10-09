@@ -1,0 +1,52 @@
+/*
+ * SmartInventory — stylesheet entry point.
+ *
+ * Cascade layers define precedence (later layer wins, regardless of selector
+ * specificity). That is what keeps this codebase predictable as it grows:
+ * a page rule can never be beaten by a component rule by accident.
+ *
+ * To add a stylesheet: create the file, then add ONE @import line below in
+ * the right layer. `npm run build` bundles everything into dist/app.min.css.
+ */
+@layer reset, tokens, base, layout, components, pages, utilities;
+
+/* 1. Design tokens — the only place raw values (colours, shadows, sizes) live */
+@import url("./tokens/colors.css") layer(tokens);
+@import url("./tokens/elevation.css") layer(tokens);
+@import url("./tokens/scale.css") layer(tokens);
+
+/* 2. Base — element defaults, no classes */
+@import url("./base/reset.css") layer(reset);
+@import url("./base/typography.css") layer(base);
+@import url("./base/a11y.css") layer(base);
+
+/* 3. Layout — page skeleton and spacing primitives */
+@import url("./layout/primitives.css") layer(layout);
+@import url("./layout/shell.css") layer(layout);
+@import url("./layout/sidebar.css") layer(layout);
+@import url("./layout/topbar.css") layer(layout);
+
+/* 4. Components — reusable, page-agnostic UI */
+@import url("./components/brand.css") layer(components);
+@import url("./components/button.css") layer(components);
+@import url("./components/theme-toggle.css") layer(components);
+@import url("./components/card.css") layer(components);
+@import url("./components/form.css") layer(components);
+@import url("./components/chip.css") layer(components);
+@import url("./components/badge.css") layer(components);
+@import url("./components/meter.css") layer(components);
+@import url("./components/table.css") layer(components);
+@import url("./components/list.css") layer(components);
+@import url("./components/stat.css") layer(components);
+@import url("./components/alert.css") layer(components);
+@import url("./components/toast.css") layer(components);
+@import url("./components/pagination.css") layer(components);
+@import url("./components/empty.css") layer(components);
+
+/* 5. Pages — only what a single page needs on top of components */
+@import url("./pages/auth.css") layer(pages);
+@import url("./pages/dashboard.css") layer(pages);
+@import url("./pages/products.css") layer(pages);
+
+/* 6. Utilities — single-purpose helpers, always win */
+@import url("./utilities.css") layer(utilities);

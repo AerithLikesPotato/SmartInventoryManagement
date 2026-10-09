@@ -1,0 +1,169 @@
+/*
+ * Field anatomy (all pieces optional except label + input):
+ *   .field > .field__label + .input (+ .field__hint) + .field__error
+ * Server-side validation classes from ASP.NET tag helpers are styled here:
+ *   .input-validation-error, .field-validation-error
+ */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field__label {
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.field__hint {
+  font-size: var(--text-xs);
+  color: var(--c-text-muted);
+}
+
+.field__error {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--c-danger);
+}
+
+.field__error:empty {
+  display: none;
+}
+
+.input {
+  width: 100%;
+  min-height: var(--tap);
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--c-surface);
+  box-shadow: var(--inset-sm);
+  transition: box-shadow var(--dur-1) var(--ease);
+}
+
+.input::placeholder {
+  color: var(--c-text-muted);
+  opacity: 0.8;
+}
+
+.input:focus {
+  box-shadow: var(--inset-md);
+}
+
+textarea.input {
+  min-height: 6.5rem;
+  resize: vertical;
+}
+
+.input.input-validation-error,
+.input[aria-invalid="true"] {
+  outline: 2px solid var(--c-danger);
+  outline-offset: 0;
+}
+
+.input[type="number"] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Input with a trailing/leading control (password toggle, search icon). */
+.input-group {
+  position: relative;
+}
+
+.input-group > .input {
+  padding-inline-end: calc(var(--tap) + var(--space-2));
+}
+
+.input-group--leading > .input {
+  padding-inline: calc(var(--space-4) + 1.75rem) var(--space-4);
+}
+
+.input-group__action {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--space-1);
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  border: 0;
+  background: none;
+  border-radius: 50%;
+  color: var(--c-text-muted);
+}
+
+.input-group__action:hover {
+  color: var(--c-text);
+}
+
+.input-group__icon {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--space-4);
+  margin-block: auto;
+  color: var(--c-text-muted);
+  pointer-events: none;
+}
+
+/* Checkbox */
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.check__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.check__box {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--inset-sm);
+  color: transparent;
+  transition: color var(--dur-1) var(--ease);
+}
+
+.check__box::after {
+  content: "";
+  width: 0.7rem;
+  height: 0.35rem;
+  border: solid currentColor;
+  border-width: 0 0 2.5px 2.5px;
+  transform: translateY(-1px) rotate(-45deg);
+}
+
+.check__input:checked + .check__box {
+  color: var(--c-accent);
+}
+
+.check__input:focus-visible + .check__box {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* Multi-column form body */
+.form-grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+
+.form-grid > .field--full {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}

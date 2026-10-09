@@ -1,0 +1,144 @@
+@model ProductListViewModel
+@{
+    ViewData["Title"] = "Products";
+
+    var filters = new[]
+    {
+        (Value: StockFilter.All, Label: "All"),
+        (Value: StockFilter.Healthy, Label: "In stock"),
+        (Value: StockFilter.Low, Label: "Low"),
+        (Value: StockFilter.Out, Label: "Out"),
+    };
+}
+
+<div class="page-header">
+    <div class="page-header__text">
+        <h1>Products</h1>
+        <p>@Model.TotalCount.ToString("N0") @(Model.TotalCount == 1 ? "product" : "products")@(Model.IsFiltered ? " match your filters" : " in your inventory")</p>
+    </div>
+    <a class="btn btn--primary" asp-action="Create">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+        Add product
+    </a>
+</div>
+
+<section class="card card--flush" aria-label="Product list">
+    <div style="padding: var(--space-5)">
+        <form method="get" asp-action="Index" class="toolbar" role="search" data-autosubmit>
+            <div class="toolbar__search">
+                <label class="sr-only" for="q">Search products by name or SKU</label>
+                <div class="input-group input-group--leading">
+                    <svg class="icon input-group__icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+                    <input class="input" id="q" name="q" type="search" value="@Model.Query"
+                           placeholder="Search by name or SKU" autocomplete="off" />
+                </div>
+            </div>
+
+            <fieldset class="chips">
+                <legend class="sr-only">Filter by stock status</legend>
+                @foreach (var option in filters)
+                {
+                    var optionValue = option.Value.ToString().ToLowerInvariant();
+                    <div class="chip">
+                        <input class="chip__input" type="radio" name="filter" id="filter-@optionValue"
+                               value="@optionValue" checked="@(Model.Filter == option.Value)" />
+                        <label class="chip__label" for="filter-@optionValue">@option.Label</label>
+                    </div>
+                }
+            </fieldset>
+
+            <noscript><button type="submit" class="btn">Apply</button></noscript>
+        </form>
+    </div>
+
+    @if (Model.Items.Count == 0)
+    {
+        <div class="empty">
+            <span class="empty__icon" aria-hidden="true"><svg class="icon"><use href="#i-box"></use></svg></span>
+            @if (Model.IsFiltered)
+            {
+                <h3>No matching products</h3>
+                <p>Try a different search term or clear the filter.</p>
+                <a class="btn" asp-action="Index">Clear filters</a>
+            }
+            else
+            {
+                <h3>No products yet</h3>
+                <p>Add your first product to start tracking stock.</p>
+                <a class="btn btn--primary" asp-action="Create">Add product</a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="table">
+                <caption class="sr-only">Showing @Model.Items.Count of @Model.TotalCount products</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col" class="text-end">Reorder at</th>
+                        <th scope="col" class="text-end">Unit price</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Items)
+                    {
+                        <tr>
+                            <td data-label="Product" class="table__title">
+                                <div class="table__primary">@product.Name</div>
+                                <div class="table__secondary mono">@product.Sku</div>
+                            </td>
+                            <td data-label="Stock">
+                                <div class="stock-cell">
+                                    <span class="stock-cell__value">@product.CurrentStock.ToString("N0") <span class="table__secondary">/ @product.TargetStockLevel.ToString("N0")</span></span>
+                                    <partial name="Partials/_StockMeter" model="product" />
+                                </div>
+                            </td>
+                            <td data-label="Reorder at" class="text-end tabular">@product.ReorderLevel.ToString("N0")</td>
+                            <td data-label="Unit price" class="text-end tabular">@product.UnitPrice.ToString("C")</td>
+                            <td data-label="Status"><partial name="Partials/_StockBadge" model="product.Status" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <nav class="pager" aria-label="Pagination">
+            <span>Page @Model.Page of @Model.TotalPages</span>
+            <div class="pager__actions">
+                @if (Model.HasPrevious)
+                {
+                    <a class="btn" asp-action="Index" asp-route-q="@Model.Query" asp-route-filter="@Model.Filter.ToString().ToLowerInvariant()" asp-route-page="@(Model.Page - 1)" rel="prev">
+                        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
+                        Previous
+                    </a>
+                }
+                else
+                {
+                    <span class="btn" aria-disabled="true">
+                        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
+                        Previous
+                    </span>
+                }
+
+                @if (Model.HasNext)
+                {
+                    <a class="btn" asp-action="Index" asp-route-q="@Model.Query" asp-route-filter="@Model.Filter.ToString().ToLowerInvariant()" asp-route-page="@(Model.Page + 1)" rel="next">
+                        Next
+                        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                    </a>
+                }
+                else
+                {
+                    <span class="btn" aria-disabled="true">
+                        Next
+                        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                    </span>
+                }
+            </div>
+        </nav>
+    }
+</section>

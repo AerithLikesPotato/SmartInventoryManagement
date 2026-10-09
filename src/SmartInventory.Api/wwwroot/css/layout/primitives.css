@@ -1,0 +1,41 @@
+/*
+ * Layout primitives. Compose these instead of writing one-off flex/grid rules.
+ * Tune with custom properties: style="--stack-gap: var(--space-5)".
+ */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap, var(--space-4));
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cluster-gap, var(--space-3));
+}
+
+.cluster--between {
+  justify-content: space-between;
+}
+
+/* Responsive auto-fit grid; --grid-min controls when columns wrap. */
+.grid {
+  display: grid;
+  gap: var(--grid-gap, var(--space-5));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 15rem)), 1fr));
+}
+
+/* Page title row: heading on the left, primary action on the right. */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.page-header__text > p {
+  margin-top: var(--space-1);
+  color: var(--c-text-muted);
+}

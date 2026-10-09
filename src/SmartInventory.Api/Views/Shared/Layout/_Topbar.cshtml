@@ -1,0 +1,17 @@
+<header class="topbar">
+    <div class="topbar__start">
+        <button type="button" class="btn btn--icon drawer-only" data-sidebar-toggle
+                aria-controls="app-sidebar" aria-expanded="false" aria-label="Open navigation">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg>
+        </button>
+        <a class="brand drawer-only" asp-controller="Dashboard" asp-action="Index">
+            <span class="brand__mark" aria-hidden="true">
+                <svg class="icon"><use href="#i-box"></use></svg>
+            </span>
+            <span class="sr-only">SmartInventory</span>
+        </a>
+    </div>
+    <div class="topbar__end">
+        <partial name="Partials/_ThemeToggle" />
+    </div>
+</header>

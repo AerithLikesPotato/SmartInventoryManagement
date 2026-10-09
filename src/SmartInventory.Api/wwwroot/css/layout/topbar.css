@@ -1,0 +1,27 @@
+.topbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-topbar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  max-width: var(--content-max);
+  width: 100%;
+  margin-inline: auto;
+  padding: var(--space-4) var(--space-5);
+  background: var(--c-surface);
+}
+
+.topbar__start,
+.topbar__end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+@media (max-width: 63.99rem) {
+  .topbar {
+    padding-inline: var(--space-4);
+  }
+}
