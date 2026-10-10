@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Data.SqlTypes;
+using Microsoft.AspNetCore.Identity;
 using SmartInventory.Infrastructure.Identity;
 
 namespace SmartInventory.Infrastructure.Data;
@@ -9,13 +10,17 @@ public static class DbSeeder
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager)
     {
-        // 1. Ensure Admin role exists
+        
         if (!await roleManager.RoleExistsAsync("Admin"))
         {
             await roleManager.CreateAsync(new IdentityRole("Admin"));
         }
+        if (!await roleManager.RoleExistsAsync("Cashier"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Cashier"));
+        }
 
-        // 2. Ensure default Admin user exists
+        
         const string adminEmail = "admin@smartinventory.com";
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
@@ -33,6 +38,23 @@ public static class DbSeeder
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(user, "Admin");
+            }
+        }
+
+        const string cashierEmail = "cashier@SmartInventory.com";
+        var cashierUser = await userManager.FindByEmailAsync(cashierEmail);
+        if (cashierUser == null)
+        {
+            var cashier = new ApplicationUser
+            {
+                UserName = cashierEmail,
+                Email = cashierEmail,
+                FullName = "Cashier",
+                EmailConfirmed = true
+            };
+            if ((await userManager.CreateAsync(cashier, "Cashier123!")).Succeeded)
+            {
+                await userManager.AddToRoleAsync(cashier, "Cashier");
             }
         }
     }

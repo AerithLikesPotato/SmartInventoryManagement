@@ -1,24 +1,31 @@
 @*
-    Primary navigation. To add a page to the menu, add ONE line to `nav` below.
-    The active item is derived from the current controller (aria-current="page").
+    Primary navigation. Items are filtered based on the user's role.
 *@
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
 
-    var nav = new[]
-    {
-        (Label: "Dashboard", Controller: "Dashboard", Action: "Index", Icon: "grid"),
-        (Label: "Products", Controller: "Products", Action: "Index", Icon: "box"),
-    };
+    // Cashiers only see the Sales Counter; Admins see the whole store
+    var nav = User.IsInRole("Admin")
+        ? new[]
+        {
+            (Label: "Dashboard", Controller: "Dashboard", Action: "Index", Icon: "grid"),
+            (Label: "Inventory", Controller: "Products", Action: "Index", Icon: "box"),
+            (Label: "Sales (POS)", Controller: "Sales", Action: "Index", Icon: "layers")
+        }
+        : new[]
+        {
+            (Label: "Sales (POS)", Controller: "Sales", Action: "Index", Icon: "layers")
+        };
 
     var userName = User.Identity?.Name ?? "Signed in";
     var initial = userName.Length > 0 ? char.ToUpperInvariant(userName[0]).ToString() : "?";
-    var role = User.IsInRole("Admin") ? "Administrator" : "Member";
+    var role = User.IsInRole("Admin") ? "Administrator" : "Cashier";
 }
+
 <div class="sidebar" id="app-sidebar" data-sidebar>
     <div class="sidebar__panel">
         <div class="sidebar__head">
-            <a class="brand" asp-controller="Dashboard" asp-action="Index">
+            <a class="brand" asp-controller="@(User.IsInRole("Admin") ? "Dashboard" : "Sales")" asp-action="Index">
                 <span class="brand__mark" aria-hidden="true">
                     <svg class="icon"><use href="#i-box"></use></svg>
                 </span>

@@ -8,16 +8,19 @@ namespace SmartInventory.Api.Controllers;
 public class AccountController : Controller
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public AccountController(SignInManager<ApplicationUser> signInManager)
+    public AccountController(
+        SignInManager<ApplicationUser> signInManager,
+        UserManager<ApplicationUser> userManager)
     {
         _signInManager = signInManager;
+        _userManager = userManager;
     }
 
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
     {
-        
         if (User.Identity?.IsAuthenticated == true)
         {
             return RedirectToAction("Index", "Dashboard");
@@ -41,6 +44,7 @@ public class AccountController : Controller
             model.Password,
             model.RememberMe,
             lockoutOnFailure: false);
+
         if (result.Succeeded)
         {
             if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
@@ -48,9 +52,16 @@ public class AccountController : Controller
                 return Redirect(model.ReturnUrl);
             }
 
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null && await _userManager.IsInRoleAsync(user, "Cashier"))
+            {
+                return RedirectToAction("Index", "Sales");
+            }
+
             return RedirectToAction("Index", "Dashboard");
         }
-        ModelState.AddModelError(string.Empty, "Invalid login attempt");
+
+        ModelState.AddModelError(string.Empty, "Invalid email or password.");
         return View(model);
     }
 
