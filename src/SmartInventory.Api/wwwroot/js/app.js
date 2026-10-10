@@ -14,6 +14,7 @@ import { initForms } from './modules/forms.js';
 import { initAutoSubmit } from './modules/auto-submit.js';
 import { initToasts } from './modules/toast.js';
 import { initLocalTime } from './modules/time.js';
+import { initPos } from './modules/pos/index.js';
 
 onReady(() => {
   initTheme();
@@ -23,4 +24,5 @@ onReady(() => {
   initAutoSubmit();
   initToasts();
   initLocalTime();
+  initPos();
 });

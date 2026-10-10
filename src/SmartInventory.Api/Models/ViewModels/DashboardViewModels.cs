@@ -17,7 +17,26 @@ public class ActivityRowViewModel
     public TransactionType Type { get; init; }
     public int Quantity { get; init; }
     public string? ReferenceNumber { get; init; }
+    public string? Notes { get; init; }
+    public string? PerformedBy { get; init; }
     public DateTime TimestampUtc { get; init; }
+
+    /// <summary>
+    /// Displays the user/cashier who performed the action, falling back to parsed notes or "System".
+    /// </summary>
+    public string Actor
+    {
+        get
+        {
+            if (!string.IsNullOrWhiteSpace(PerformedBy))
+                return PerformedBy;
+
+            if (Notes != null && Notes.StartsWith("POS sale · ", StringComparison.OrdinalIgnoreCase))
+                return Notes["POS sale · ".Length..].Trim();
+
+            return "System";
+        }
+    }
 }
 
 public class DashboardViewModel

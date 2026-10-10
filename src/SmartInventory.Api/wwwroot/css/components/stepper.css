@@ -1,0 +1,53 @@
+/* Quantity stepper:  [ - ] [ 3 ] [ + ]   Touch-sized, number input has no browser spinners. */
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stepper__btn {
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  border: 0;
+  border-radius: 50%;
+  background: var(--c-surface);
+  color: var(--c-text);
+  box-shadow: var(--raised-sm);
+  transition: box-shadow var(--dur-1) var(--ease);
+}
+
+.stepper__btn:hover {
+  box-shadow: var(--raised-md);
+}
+
+.stepper__btn:active {
+  box-shadow: var(--inset-sm);
+}
+
+.stepper__btn:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.stepper__input {
+  width: 3.5rem;
+  min-height: var(--tap);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+  box-shadow: var(--inset-sm);
+  font-weight: 800;
+  text-align: center;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.stepper__input::-webkit-inner-spin-button,
+.stepper__input::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}

@@ -1,0 +1,183 @@
+@using System.Globalization
+@model SalesIndexViewModel
+@{
+    ViewData["Title"] = "Sales counter";
+
+    // Prices go to JavaScript as invariant numbers ("12.50"), whatever the server culture is.
+    string Num(decimal value) => value.ToString(CultureInfo.InvariantCulture);
+}
+
+@*
+    POS screen. Behaviour lives in wwwroot/js/modules/pos/ and finds this markup ONLY through data-pos-* attributes,
+    so the layout can be restyled freely without touching the JavaScript.
+*@
+<div class="pos" data-pos data-currency="@Model.Currency" data-storage-key="si-pos-cart">
+
+    <section class="pos__catalog stack" aria-labelledby="pos-title">
+        <div class="page-header">
+            <div class="page-header__text">
+                <h1 id="pos-title">Sales counter</h1>
+                <p data-pos-count>@Model.Products.Count.ToString("N0") products</p>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="sr-only" for="pos-search">Find a product by name or SKU, then press Enter to add it</label>
+            <div class="input-group input-group--leading">
+                <svg class="icon input-group__icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+                <input class="input pos__search" id="pos-search" type="search" data-pos-search
+                       placeholder="Scan or search name / SKU" autocomplete="off" autofocus />
+            </div>
+        </div>
+
+        @if (Model.IsTruncated)
+        {
+            <p class="alert" role="note">Showing the first @Model.Products.Count.ToString("N0") products. Narrow the search to find others.</p>
+        }
+
+        <div class="pos-grid" data-pos-grid role="list">
+            @foreach (var product in Model.Products)
+            {
+                var isOut = product.StockState == "out";
+                var badgeClass = product.StockState switch
+                {
+                    "out" => "badge badge--danger",
+                    "low" => "badge badge--warning",
+                    _ => "badge"
+                };
+                <button type="button" class="pos-tile" role="listitem"
+                        data-pos-product
+                        data-id="@product.Id"
+                        data-sku="@product.Sku"
+                        data-name="@product.Name"
+                        data-price="@Num(product.UnitPrice)"
+                        data-stock="@product.CurrentStock"
+                        data-search="@product.SearchText"
+                        disabled="@isOut">
+                    <span class="pos-tile__media">
+                        @if (!string.IsNullOrEmpty(product.ImageUrl))
+                        {
+                            <img src="@product.ImageUrl" alt="" class="pos-tile__img" loading="lazy" />
+                        }
+                        else
+                        {
+                            <span class="pos-tile__img-placeholder" aria-hidden="true">
+                                <svg class="icon"><use href="#i-box"></use></svg>
+                            </span>
+                        }
+                    </span>
+                    <span class="pos-tile__name">@product.Name</span>
+                    <span class="pos-tile__sku mono">@product.Sku</span>
+                    <span class="pos-tile__foot">
+                        <span class="pos-tile__price tabular" data-pos-price>@product.UnitPrice.ToString("N2")</span>
+                        <span class="@badgeClass" data-pos-stock-badge>@(isOut ? "Out of stock" : product.CurrentStock.ToString("N0") + " left")</span>
+                    </span>
+                </button>
+            }
+        </div>
+
+        <div class="empty" data-pos-empty hidden>
+            <span class="empty__icon" aria-hidden="true"><svg class="icon"><use href="#i-search"></use></svg></span>
+            <h2>No matching products</h2>
+            <p>Check the spelling or scan the barcode again.</p>
+        </div>
+
+        @if (Model.Products.Count == 0)
+        {
+            <div class="empty">
+                <span class="empty__icon" aria-hidden="true"><svg class="icon"><use href="#i-box"></use></svg></span>
+                <h2>No products to sell yet</h2>
+                <p>An administrator needs to add products to the inventory first.</p>
+            </div>
+        }
+
+        @* Small screens: the cart sits below the grid, so keep a one-tap shortcut to it. *@
+        <a class="pos__bar btn btn--primary drawer-only" href="#cart" data-pos-bar hidden>
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-cart"></use></svg>
+            <span><span data-pos-bar-count>0</span> items</span>
+            <strong class="tabular" data-pos-bar-total></strong>
+        </a>
+    </section>
+
+    <aside class="pos__cart card" id="cart" aria-labelledby="cart-title" tabindex="-1">
+
+        @* ---- Current sale ---- *@
+        <form asp-action="Checkout" method="post" class="stack" style="--stack-gap: var(--space-4)" data-pos-checkout data-pos-cart-view>
+            <div class="card__header" style="margin-bottom: 0">
+                <h2 id="cart-title">Current sale</h2>
+                <button type="button" class="btn" data-pos-clear disabled>Clear</button>
+            </div>
+
+            <ul class="cart-lines" data-pos-lines aria-label="Items in the sale"></ul>
+
+            <div class="empty" data-pos-cart-empty>
+                <span class="empty__icon" aria-hidden="true"><svg class="icon"><use href="#i-cart"></use></svg></span>
+                <p>Tap a product or scan its barcode to start a sale.</p>
+            </div>
+
+            <div class="alert alert--danger" role="alert" data-pos-errors hidden>
+                <ul data-pos-error-list></ul>
+            </div>
+
+            <dl class="cart-total">
+                <dt>Total</dt>
+                <dd class="tabular" data-pos-total>—</dd>
+            </dl>
+
+            <button type="submit" class="btn btn--primary btn--block pos__checkout" data-pos-submit disabled
+                    data-loading-label="Processing…">
+                Complete sale
+            </button>
+        </form>
+
+        @* ---- Receipt (shown after a successful sale) ---- *@
+        <div class="stack" style="--stack-gap: var(--space-4)" data-pos-receipt hidden>
+            <div class="receipt__head">
+                <span class="empty__icon" aria-hidden="true" style="color: var(--c-success)"><svg class="icon"><use href="#i-check-circle"></use></svg></span>
+                <h2 tabindex="-1" data-pos-receipt-title>Sale complete</h2>
+                <p class="text-muted text-sm">Receipt <span class="mono" data-pos-receipt-number></span></p>
+            </div>
+            <ul class="cart-lines" data-pos-receipt-lines aria-label="Sold items"></ul>
+            <dl class="cart-total">
+                <dt>Total paid</dt>
+                <dd class="tabular" data-pos-receipt-total></dd>
+            </dl>
+            <button type="button" class="btn btn--primary btn--block" data-pos-new-sale>New sale</button>
+        </div>
+
+        <p class="sr-only" role="status" aria-live="polite" data-pos-status></p>
+    </aside>
+</div>
+
+@* Row templates: cloned by JS so markup stays in the view, not in script strings. *@
+<template data-pos-line-template>
+    <li class="cart-line" data-pos-line>
+        <div class="cart-line__info">
+            <p class="cart-line__name" data-line-name></p>
+            <p class="cart-line__meta text-muted"><span data-line-unit></span> each</p>
+        </div>
+        <div class="stepper" role="group" aria-label="Quantity">
+            <button type="button" class="stepper__btn" data-action="dec" aria-label="Decrease quantity">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg>
+            </button>
+            <input class="stepper__input tabular" type="number" inputmode="numeric" min="1" step="1" data-line-qty aria-label="Quantity" />
+            <button type="button" class="stepper__btn" data-action="inc" aria-label="Increase quantity">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+            </button>
+        </div>
+        <p class="cart-line__total tabular" data-line-total></p>
+        <button type="button" class="cart-line__remove" data-action="remove" aria-label="Remove item">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+        </button>
+    </li>
+</template>
+
+<template data-pos-receipt-line-template>
+    <li class="cart-line cart-line--receipt">
+        <div class="cart-line__info">
+            <p class="cart-line__name" data-line-name></p>
+            <p class="cart-line__meta text-muted"><span data-line-qty></span> × <span data-line-unit></span></p>
+        </div>
+        <p class="cart-line__total tabular" data-line-total></p>
+    </li>
+</template>

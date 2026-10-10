@@ -1,4 +1,4 @@
-﻿namespace SmartInventory.Core.Entities;
+namespace SmartInventory.Core.Entities;
 
 public enum TransactionType
 {
@@ -17,5 +17,6 @@ public class StockTransaction
     public int Quantity { get; set; }
     public string? ReferenceNumber { get; set; }
     public string? Notes { get; set; }
+    public string? PerformedBy { get; set; }
     public DateTime TimestampUtc { get; set; } = DateTime.UtcNow;
 }

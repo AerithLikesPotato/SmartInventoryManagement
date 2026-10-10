@@ -15,7 +15,7 @@
         </a>
     </div>
 
-    <form asp-action="Create" method="post" class="card stack" style="--stack-gap: var(--space-5)" data-submit-lock novalidate>
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="card stack" style="--stack-gap: var(--space-5)" data-submit-lock novalidate>
         <div asp-validation-summary="ModelOnly" class="alert alert--danger" role="alert"></div>
 
         <div class="form-grid">
@@ -35,6 +35,29 @@
                 <label asp-for="Description" class="field__label"></label>
                 <textarea asp-for="Description" class="input" rows="3" aria-describedby="Description-error"></textarea>
                 <span asp-validation-for="Description" id="Description-error" class="field__error"></span>
+            </div>
+
+            <div class="field field--full">
+                <label asp-for="ImageFile" class="field__label"></label>
+                <div class="image-upload" data-image-uploader>
+                    <div class="image-upload__preview-box">
+                        <div class="image-upload__placeholder" data-preview-placeholder>
+                            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg>
+                            <span class="text-xs">No image</span>
+                        </div>
+                        <img src="" alt="Preview" class="image-upload__img" data-preview-img hidden />
+                    </div>
+                    <div class="image-upload__controls">
+                        <label class="btn" for="ImageFile" style="cursor: pointer; align-self: flex-start;">
+                            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                            Choose picture
+                        </label>
+                        <input asp-for="ImageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"
+                               class="image-upload__file-input" id="ImageFile" data-image-input />
+                        <span class="field__hint">Supports JPG, PNG, WEBP, or GIF up to 5 MB.</span>
+                        <span asp-validation-for="ImageFile" class="field__error"></span>
+                    </div>
+                </div>
             </div>
 
             <div class="field">
@@ -74,3 +97,27 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('[data-image-uploader]').forEach(function(uploader) {
+            var input = uploader.querySelector('[data-image-input]');
+            var previewImg = uploader.querySelector('[data-preview-img]');
+            var placeholder = uploader.querySelector('[data-preview-placeholder]');
+            if (!input || !previewImg || !placeholder) return;
+
+            input.addEventListener('change', function() {
+                var file = input.files && input.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                        previewImg.hidden = false;
+                        placeholder.hidden = true;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+}

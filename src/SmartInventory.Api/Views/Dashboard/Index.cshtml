@@ -114,10 +114,17 @@
                 <li class="list__item">
                     <div class="list__main">
                         <p class="list__title">@item.ProductName</p>
-                        <p class="list__sub">@item.Type.Label()@(string.IsNullOrWhiteSpace(item.ReferenceNumber) ? "" : " · Ref " + item.ReferenceNumber)</p>
+                        <p class="list__sub">
+                            <span>@item.Type.Label()</span>
+                            <span> · by <span class="mono" style="font-weight: 600">@item.Actor</span></span>
+                            @if (!string.IsNullOrWhiteSpace(item.ReferenceNumber))
+                            {
+                                <span> · Ref @item.ReferenceNumber</span>
+                            }
+                        </p>
                     </div>
                     <div class="list__aside">
-                        <span class="list__title tabular">@item.Type.Sign()@item.Quantity.ToString("N0")</span>
+                        <span class="list__title tabular">@item.Type.Sign()@Math.Abs(item.Quantity).ToString("N0")</span>
                         <time class="list__sub" datetime="@item.TimestampUtc.ToString("o")" data-localize>@item.TimestampUtc.ToString("MMM d, HH:mm") UTC</time>
                     </div>
                 </li>

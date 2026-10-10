@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SmartInventory.Api.Models.ViewModels;
 using SmartInventory.Infrastructure.Identity;
@@ -23,6 +23,10 @@ public class AccountController : Controller
     {
         if (User.Identity?.IsAuthenticated == true)
         {
+            if (User.IsInRole("Cashier"))
+            {
+                return RedirectToAction("Index", "Sales");
+            }
             return RedirectToAction("Index", "Dashboard");
         }
 
@@ -47,15 +51,15 @@ public class AccountController : Controller
 
         if (result.Succeeded)
         {
-            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-            {
-                return Redirect(model.ReturnUrl);
-            }
-
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null && await _userManager.IsInRoleAsync(user, "Cashier"))
             {
                 return RedirectToAction("Index", "Sales");
+            }
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
             }
 
             return RedirectToAction("Index", "Dashboard");
@@ -63,6 +67,12 @@ public class AccountController : Controller
 
         ModelState.AddModelError(string.Empty, "Invalid email or password.");
         return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 
     [HttpPost]

@@ -1,0 +1,19 @@
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="auth__intro" style="text-align: center;">
+    <div style="font-size: 3rem; margin-bottom: var(--space-3);" aria-hidden="true">🚫</div>
+    <h1>Access Restricted</h1>
+    <p>You do not have permission to access that page.</p>
+</div>
+
+<div class="stack" style="--stack-gap: var(--space-4); margin-top: var(--space-4);">
+    <a asp-controller="@(User.IsInRole("Cashier") ? "Sales" : "Dashboard")" asp-action="Index" class="btn btn--primary btn--block">
+        Return to @(User.IsInRole("Cashier") ? "Sales Counter" : "Dashboard")
+    </a>
+    <form asp-controller="Account" asp-action="Logout" method="post">
+        <button type="submit" class="btn btn--block">Sign out</button>
+    </form>
+</div>

@@ -81,6 +81,7 @@
                         <th scope="col" class="text-end">Reorder at</th>
                         <th scope="col" class="text-end">Unit price</th>
                         <th scope="col">Status</th>
+                        <th scope="col" class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,8 +89,22 @@
                     {
                         <tr>
                             <td data-label="Product" class="table__title">
-                                <div class="table__primary">@product.Name</div>
-                                <div class="table__secondary mono">@product.Sku</div>
+                                <div class="product-media">
+                                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                    {
+                                        <img src="@product.ImageUrl" alt="@product.Name" class="product-thumb" loading="lazy" />
+                                    }
+                                    else
+                                    {
+                                        <div class="product-thumb product-thumb--placeholder" aria-hidden="true">
+                                            <svg class="icon"><use href="#i-box"></use></svg>
+                                        </div>
+                                    }
+                                    <div>
+                                        <div class="table__primary">@product.Name</div>
+                                        <div class="table__secondary mono">@product.Sku</div>
+                                    </div>
+                                </div>
                             </td>
                             <td data-label="Stock">
                                 <div class="stock-cell">
@@ -100,6 +115,12 @@
                             <td data-label="Reorder at" class="text-end tabular">@product.ReorderLevel.ToString("N0")</td>
                             <td data-label="Unit price" class="text-end tabular">@product.UnitPrice.ToString("C")</td>
                             <td data-label="Status"><partial name="Partials/_StockBadge" model="product.Status" /></td>
+                            <td data-label="Actions" class="text-end">
+                                <a class="btn btn--sm" asp-action="Edit" asp-route-id="@product.Id" title="Edit @product.Name">
+                                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-edit"></use></svg>
+                                    Edit
+                                </a>
+                            </td>
                         </tr>
                     }
                 </tbody>

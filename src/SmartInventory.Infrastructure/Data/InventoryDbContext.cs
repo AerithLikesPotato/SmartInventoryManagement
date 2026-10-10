@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SmartInventory.Core.Entities;
 using SmartInventory.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -25,11 +25,13 @@ public class InventoryDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(p => p.Sku).HasMaxLength(100).IsRequired();
             entity.Property(p => p.Name).HasMaxLength(200).IsRequired();
             entity.Property(p => p.UnitPrice).HasPrecision(18, 2);
+            entity.Property(p => p.ImageUrl).HasMaxLength(500);
         });
         modelBuilder.Entity<StockTransaction>(entity =>
         {
             entity.HasKey(t => t.Id);
             entity.HasIndex(t => new { t.ProductId, t.TimestampUtc });
+            entity.Property(t => t.PerformedBy).HasMaxLength(256);
             entity.HasOne(t => t.Product)
                 .WithMany(p => p.Transactions)
                 .HasForeignKey(t => t.ProductId)

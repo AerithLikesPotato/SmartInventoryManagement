@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SmartInventory.Core.Interfaces;
 using SmartInventory.Infrastructure.Data;
 using SmartInventory.Infrastructure.Identity;
+using SmartInventory.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ISalesService, SalesService>();
 
 
 var app = builder.Build();
@@ -56,8 +59,19 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
+app.MapGet("/", (HttpContext context) =>
+{
+    if (context.User.Identity?.IsAuthenticated == true)
+    {
+        return context.User.IsInRole("Cashier")
+            ? Results.Redirect("/Sales")
+            : Results.Redirect("/Dashboard");
+    }
+    return Results.Redirect("/Account/Login");
+});
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+    pattern: "{controller}/{action=Index}/{id?}");
 
 app.Run();

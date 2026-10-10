@@ -1,4 +1,4 @@
-﻿using System.Data.SqlTypes;
+using System.Data.SqlTypes;
 using Microsoft.AspNetCore.Identity;
 using SmartInventory.Infrastructure.Identity;
 
@@ -56,6 +56,10 @@ public static class DbSeeder
             {
                 await userManager.AddToRoleAsync(cashier, "Cashier");
             }
+        }
+        else if (!await userManager.IsInRoleAsync(cashierUser, "Cashier"))
+        {
+            await userManager.AddToRoleAsync(cashierUser, "Cashier");
         }
     }
 }

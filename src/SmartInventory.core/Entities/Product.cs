@@ -1,4 +1,4 @@
-﻿namespace SmartInventory.Core.Entities;
+namespace SmartInventory.Core.Entities;
 
 public class Product
 {
@@ -7,6 +7,7 @@ public class Product
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public decimal UnitPrice { get; set; }
+    public string? ImageUrl { get; set; }
     
     //inventory
     public int currentStock { get; set; }

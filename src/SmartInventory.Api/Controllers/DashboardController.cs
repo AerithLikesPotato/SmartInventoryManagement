@@ -6,7 +6,7 @@ using SmartInventory.Infrastructure.Data;
 
 namespace SmartInventory.Api.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class DashboardController : Controller
 {
     private readonly InventoryDbContext _db;
@@ -69,6 +69,8 @@ public class DashboardController : Controller
                 Type = t.Type,
                 Quantity = t.Quantity,
                 ReferenceNumber = t.ReferenceNumber,
+                Notes = t.Notes,
+                PerformedBy = t.PerformedBy,
                 TimestampUtc = t.TimestampUtc
             })
             .ToListAsync(ct);
